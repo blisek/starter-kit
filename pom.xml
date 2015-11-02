@@ -46,6 +46,14 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-test</artifactId>
         </dependency>
+        <dependency>
+        	<groupId>org.aspectj</groupId>
+        	<artifactId>aspectjrt</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.aspectj</groupId>
+			<artifactId>aspectjtools</artifactId>
+		</dependency>
     </dependencies>
 
     <dependencyManagement>
@@ -87,6 +95,16 @@
                 <version>${spring.framework.version}</version>
                 <scope>test</scope>
             </dependency>
+            <dependency>
+			    <groupId>org.aspectj</groupId>
+			    <artifactId>aspectjrt</artifactId>
+			    <version>1.8.7</version>
+			</dependency>
+			<dependency>
+				<groupId>org.aspectj</groupId>
+				<artifactId>aspectjtools</artifactId>
+				<version>1.8.7</version>
+			</dependency>
         </dependencies>
     </dependencyManagement>
 

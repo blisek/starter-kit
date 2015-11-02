@@ -1,35 +1,29 @@
 package pl.spring.demo.aop;
 
 
-import org.springframework.aop.MethodBeforeAdvice;
-import pl.spring.demo.annotation.NullableId;
+import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.annotation.Around;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Pointcut;
+
+import pl.spring.demo.dao.impl.BookDaoImpl;
 import pl.spring.demo.exception.BookNotNullIdException;
-import pl.spring.demo.to.IdAware;
+import pl.spring.demo.to.BookTo;
 
-import java.lang.reflect.Method;
+@Aspect
+public class BookDaoAdvisor {
 
-public class BookDaoAdvisor implements MethodBeforeAdvice {
-
-    @Override
-    public void before(Method method, Object[] objects, Object o) throws Throwable {
-
-        if (hasAnnotation(method, o, NullableId.class)) {
-            checkNotNullId(objects[0]);
-        }
-    }
-
-    private void checkNotNullId(Object o) {
-        if (o instanceof IdAware && ((IdAware) o).getId() != null) {
-            throw new BookNotNullIdException();
-        }
-    }
-
-    private boolean hasAnnotation (Method method, Object o, Class annotationClazz) throws NoSuchMethodException {
-        boolean hasAnnotation = method.getAnnotation(annotationClazz) != null;
-
-        if (!hasAnnotation && o != null) {
-            hasAnnotation = o.getClass().getMethod(method.getName(), method.getParameterTypes()).getAnnotation(annotationClazz) != null;
-        }
-        return hasAnnotation;
-    }
+	@Pointcut("within(pl.spring.demo..*) && @annotation(pl.spring.demo.annotation.NullableId)")
+	public void nullableIdAnnotatedMethods() {}
+	
+	@Pointcut("execution(* pl.spring.demo.dao.impl.BookDaoImpl.save(..))")
+	public void bookDaoSaveMethod() {}
+	
+	@Around("nullableIdAnnotatedMethods() && bookDaoSaveMethod() && args(bookTo)")
+	public void checkNullIdAndAssignNewOne(JoinPoint joinPoint, BookTo bookTo) throws BookNotNullIdException {
+		if(bookTo.getId() != null)
+			throw new BookNotNullIdException();
+		BookDaoImpl bookDao = (BookDaoImpl)joinPoint.getTarget();
+		bookTo.setId(bookDao.getNextId());
+	}
 }
