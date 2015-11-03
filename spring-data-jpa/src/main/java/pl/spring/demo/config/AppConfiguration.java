@@ -10,9 +10,11 @@ import org.springframework.core.convert.converter.Converter;
 
 import pl.spring.demo.aop.BookDaoAdvisor;
 import pl.spring.demo.common.Sequence;
+import pl.spring.demo.dao.BookDao;
 import pl.spring.demo.dao.impl.BookDaoImpl;
 import pl.spring.demo.entities.BookEntity;
 import pl.spring.demo.helpers.AuthorToHelper;
+import pl.spring.demo.service.BookService;
 import pl.spring.demo.service.impl.BookServiceImpl;
 import pl.spring.demo.to.BookTo;
 
@@ -23,13 +25,13 @@ import pl.spring.demo.to.BookTo;
 public class AppConfiguration {
 
 	@Bean
-	public BookServiceImpl bookService() {
+	public BookService bookService() {
 		BookServiceImpl bsi = new BookServiceImpl();
 		return bsi;
 	}
 	
 	@Bean
-	public BookDaoImpl bookDao() {
+	public BookDao bookDao() {
 		return new BookDaoImpl();
 	}
 	

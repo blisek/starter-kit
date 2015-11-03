@@ -25,33 +25,26 @@ public class BookDaoImpl implements BookDao {
     @Autowired
     private Sequence sequence;
     
-    @Autowired
-    private Converter<BookTo, BookEntity> bookTo2BookEntity;
-    
-    @Autowired
-    private Converter<BookEntity, BookTo> bookEntity2BookTo;
-
     public BookDaoImpl() {
         addTestBooks();
     }
 
     @Override
-    public List<BookTo> findAll() {
-        return ALL_BOOKS.stream().map(bookEntity2BookTo::convert)
+    public List<BookEntity> findAll() {
+        return ALL_BOOKS.stream()
         		.collect(Collectors.toList());
     }
 
     @Override
-    public List<BookTo> findBookByTitle(String title) {
+    public List<BookEntity> findBookByTitle(String title) {
     	final String titleLower = title.toLowerCase();
     	return ALL_BOOKS.stream()
     			.filter(entity -> entity.getTitle().toLowerCase().startsWith(titleLower))
-    			.map(bookEntity2BookTo::convert)
     			.collect(Collectors.toList());
     }
 
     @Override
-    public List<BookTo> findBooksByAuthor(String author) {
+    public List<BookEntity> findBooksByAuthor(String author) {
     	final AuthorTo authorTo = AuthorToHelper.string2Author(author);
     	return ALL_BOOKS.stream()
     			.filter(
@@ -59,14 +52,12 @@ public class BookDaoImpl implements BookDao {
     					.filter(auth -> authorsEquals(authorTo, auth))
     					.count() > 0
     			)
-    			.map(bookEntity2BookTo::convert)
     			.collect(Collectors.toList());
     }
 
     @Override
-    @NullableId
-    public BookTo save(BookTo book) {
-        ALL_BOOKS.add(bookTo2BookEntity.convert(book));
+    public BookEntity save(BookEntity book) {
+        ALL_BOOKS.add(book);
         return book;
     }
 
@@ -75,7 +66,7 @@ public class BookDaoImpl implements BookDao {
     }
     
     public long getNextId() {
-    	return sequence.nextValue(ALL_BOOKS);
+    	return sequence.nextValue(ALL_BOOKS)+1;
     }
     
     private static boolean authorsEquals(AuthorTo author1, AuthorTo author2) {

@@ -21,6 +21,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
 
 import pl.spring.demo.config.AppConfiguration;
+import pl.spring.demo.dao.BookDao;
 import pl.spring.demo.exception.BookNotNullIdException;
 import pl.spring.demo.to.BookTo;
 
@@ -34,6 +35,9 @@ public class BookServiceImplTest {
 
     @Autowired
     private BookService bookService;
+    
+    @Autowired
+    private BookDao bookDao;
 
     @Test
     public void testShouldFindAllBooks() {
@@ -95,4 +99,5 @@ public class BookServiceImplTest {
     	List<String> titles = booksByAuthor.stream().map(BookTo::getTitle).collect(Collectors.toList());
     	assertTrue(titles.containsAll(expectedTitles));
     }
+    
 }
