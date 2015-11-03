@@ -1,6 +1,7 @@
 package pl.spring.demo.helpers;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import pl.spring.demo.to.AuthorTo;
@@ -19,15 +20,15 @@ public class AuthorToHelper {
 		if(authorNames.length == 1) {
 			authorTo.setId(1);
 			authorTo.setFirstName("");
-			authorTo.setLastName(authorNames[0]);
+			authorTo.setLastName(authorNames[0].trim());
 		}
-		else if(authorNames.length == 2) {
+		else {
+			String lastName = authorNames[authorNames.length-1];
+			String names = String.join(AUTHOR_DELIMITER, Arrays.copyOf(authorNames, authorNames.length-1));
 			authorTo.setId(1);
-			authorTo.setFirstName(authorNames[0]);
-			authorTo.setLastName(authorNames[1]);
+			authorTo.setFirstName(names);
+			authorTo.setLastName(lastName);
 		}
-		else
-			throw new IllegalArgumentException();
 		
 		return authorTo;
 	}
@@ -44,7 +45,7 @@ public class AuthorToHelper {
 		List<AuthorTo> authorsList = new ArrayList<AuthorTo>();
 		int idCounter = 1;
 		for(String author : authors.split(AUTHORS_DELIMITER)) {
-			AuthorTo authorTo = string2Author(author);
+			AuthorTo authorTo = string2Author(author.trim());
 			authorTo.setId(idCounter++);
 			authorsList.add(authorTo);
 		}

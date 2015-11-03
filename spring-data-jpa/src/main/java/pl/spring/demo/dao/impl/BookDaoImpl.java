@@ -45,7 +45,7 @@ public class BookDaoImpl implements BookDao {
     public List<BookTo> findBookByTitle(String title) {
     	final String titleLower = title.toLowerCase();
     	return ALL_BOOKS.stream()
-    			.filter(entity -> entity.getTitle().startsWith(titleLower))
+    			.filter(entity -> entity.getTitle().toLowerCase().startsWith(titleLower))
     			.map(bookEntity2BookTo::convert)
     			.collect(Collectors.toList());
     }
@@ -90,5 +90,9 @@ public class BookDaoImpl implements BookDao {
         ALL_BOOKS.add(new BookEntity(4L, "Awantura w Niekłaju", "Edmund Niziurski"));
         ALL_BOOKS.add(new BookEntity(5L, "Pan Samochodzik i Fantomas", "Zbigniew Nienacki"));
         ALL_BOOKS.add(new BookEntity(6L, "Zemsta", "Aleksander Fredro"));
+        ALL_BOOKS.add(new BookEntity(7L, "Przygody Olivera Twista", "Charles Dickens"));
+        ALL_BOOKS.add(new BookEntity(8L, "Kreda na tablicy", "Julian Tuwim, Jan Parandowski, Marian Brandys, "
+        		+ "Hanna Mortkowicz-Olczakowa, Gustaw Morcinek, Bohdan Czeszko, Mieczysław Jastrun, Stanisław Ryszard Dobrowolski, "
+        		+ "Adam Grzymała-Siedlecki, Jerzy Zawieyski"));
     }
 }

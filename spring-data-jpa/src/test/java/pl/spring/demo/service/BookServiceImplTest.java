@@ -4,10 +4,13 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
+import static org.junit.Assert.assertTrue;
 
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,11 +42,10 @@ public class BookServiceImplTest {
         // then
         assertNotNull(allBooks);
         assertFalse(allBooks.isEmpty());
-        assertEquals(6, allBooks.size());
+        assertEquals(8, allBooks.size());
     }
 
     @Test
-    @Ignore
     public void testShouldFindAllBooksByTitle() {
         // given
         final String title = "Opium w rosole";
@@ -52,6 +54,19 @@ public class BookServiceImplTest {
         // then
         assertNotNull(booksByTitle);
         assertFalse(booksByTitle.isEmpty());
+    }
+    
+    @Test
+    public void testShouldFindAllBooksStartsWithPhrase() {
+    	// given
+    	final String title = "Przygody";
+    	final Collection<String> expectedTitles = Arrays.asList("Przygody Odyseusza", "Przygody Olivera Twista");
+    	// when
+    	List<BookTo> booksByTitle = bookService.findBooksByTitle(title);
+    	// then
+    	assertNotNull(booksByTitle);
+    	List<String> titles = booksByTitle.stream().map(BookTo::getTitle).collect(Collectors.toList());   	
+    	assertTrue(titles.containsAll(expectedTitles));
     }
 
     @Test(expected = BookNotNullIdException.class)
@@ -63,5 +78,21 @@ public class BookServiceImplTest {
         bookService.saveBook(bookToSave);
         // then
         fail("test should throw BookNotNullIdException");
+    }
+    
+    @Test
+    public void testShouldFindAllAuthors() {
+    	// given
+    	final String author = "Jan Parandowski";
+    	
+    	// when
+    	List<BookTo> booksByAuthor = bookService.findBooksByAuthor(author);
+    	
+    	// then
+    	assertNotNull(booksByAuthor);
+    	assertFalse(booksByAuthor.isEmpty());
+    	final List<String> expectedTitles = Arrays.asList("Przygody Odyseusza", "Kreda na tablicy");
+    	List<String> titles = booksByAuthor.stream().map(BookTo::getTitle).collect(Collectors.toList());
+    	assertTrue(titles.containsAll(expectedTitles));
     }
 }
