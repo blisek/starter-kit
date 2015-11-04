@@ -1,88 +1,62 @@
 package pl.spring.demo.dao.impl;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
+import javax.annotation.PostConstruct;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
-import pl.spring.demo.annotation.NullableId;
-import pl.spring.demo.common.Sequence;
 import pl.spring.demo.dao.BookDao;
+import pl.spring.demo.db.Storage;
 import pl.spring.demo.entities.BookEntity;
-import pl.spring.demo.helpers.AuthorToHelper;
-import pl.spring.demo.to.AuthorTo;
-import pl.spring.demo.to.BookTo;
 
 @Component
 public class BookDaoImpl implements BookDao {
 
-    private final Set<BookEntity> ALL_BOOKS = new HashSet<>();
-
     @Autowired
-    private Sequence sequence;
+    private Storage<BookEntity> bookEntityStorage;
     
-    public BookDaoImpl() {
-        addTestBooks();
-    }
 
     @Override
     public List<BookEntity> findAll() {
-        return ALL_BOOKS.stream()
+        return bookEntityStorage.getAsAStream()
         		.collect(Collectors.toList());
     }
 
     @Override
     public List<BookEntity> findBookByTitle(String title) {
     	final String titleLower = title.toLowerCase();
-    	return ALL_BOOKS.stream()
+    	return bookEntityStorage.getAsAStream()
     			.filter(entity -> entity.getTitle().toLowerCase().startsWith(titleLower))
     			.collect(Collectors.toList());
     }
 
     @Override
     public List<BookEntity> findBooksByAuthor(String author) {
-    	final AuthorTo authorTo = AuthorToHelper.string2Author(author);
-    	return ALL_BOOKS.stream()
-    			.filter(
-    					entity -> entity.getAuthors().stream()
-    					.filter(auth -> authorsEquals(authorTo, auth))
-    					.count() > 0
-    			)
+    	final String authorsLowerCase = author.toLowerCase();
+    	return bookEntityStorage.getAsAStream()
+    			.filter(b -> b.getAuthors().toLowerCase().contains(authorsLowerCase))
     			.collect(Collectors.toList());
     }
 
     @Override
     public BookEntity save(BookEntity book) {
-        ALL_BOOKS.add(book);
+        bookEntityStorage.add(book);
         return book;
     }
 
-    public void setSequence(Sequence sequence) {
-        this.sequence = sequence;
-    }
-    
-    public long getNextId() {
-    	return sequence.nextValue(ALL_BOOKS)+1;
-    }
-    
-    private static boolean authorsEquals(AuthorTo author1, AuthorTo author2) {
-    	return author1.getFirstName().equalsIgnoreCase(author2.getFirstName()) &&
-    			author1.getLastName().equalsIgnoreCase(author2.getLastName());
-    }
-
+    @PostConstruct
     private void addTestBooks() {
-        ALL_BOOKS.add(new BookEntity(1L, "Romeo i Julia", "Wiliam Szekspir"));
-        ALL_BOOKS.add(new BookEntity(2L, "Opium w rosole", "Hanna Ożogowska"));
-        ALL_BOOKS.add(new BookEntity(3L, "Przygody Odyseusza", "Jan Parandowski"));
-        ALL_BOOKS.add(new BookEntity(4L, "Awantura w Niekłaju", "Edmund Niziurski"));
-        ALL_BOOKS.add(new BookEntity(5L, "Pan Samochodzik i Fantomas", "Zbigniew Nienacki"));
-        ALL_BOOKS.add(new BookEntity(6L, "Zemsta", "Aleksander Fredro"));
-        ALL_BOOKS.add(new BookEntity(7L, "Przygody Olivera Twista", "Charles Dickens"));
-        ALL_BOOKS.add(new BookEntity(8L, "Kreda na tablicy", "Julian Tuwim, Jan Parandowski, Marian Brandys, "
+        bookEntityStorage.add(new BookEntity(1L, "Romeo i Julia", "Wiliam Szekspir"));
+        bookEntityStorage.add(new BookEntity(2L, "Opium w rosole", "Hanna Ożogowska"));
+        bookEntityStorage.add(new BookEntity(3L, "Przygody Odyseusza", "Jan Parandowski"));
+        bookEntityStorage.add(new BookEntity(4L, "Awantura w Niekłaju", "Edmund Niziurski"));
+        bookEntityStorage.add(new BookEntity(5L, "Pan Samochodzik i Fantomas", "Zbigniew Nienacki"));
+        bookEntityStorage.add(new BookEntity(6L, "Zemsta", "Aleksander Fredro"));
+        bookEntityStorage.add(new BookEntity(7L, "Przygody Olivera Twista", "Charles Dickens"));
+        bookEntityStorage.add(new BookEntity(8L, "Kreda na tablicy", "Julian Tuwim, Jan Parandowski, Marian Brandys, "
         		+ "Hanna Mortkowicz-Olczakowa, Gustaw Morcinek, Bohdan Czeszko, Mieczysław Jastrun, Stanisław Ryszard Dobrowolski, "
         		+ "Adam Grzymała-Siedlecki, Jerzy Zawieyski"));
     }

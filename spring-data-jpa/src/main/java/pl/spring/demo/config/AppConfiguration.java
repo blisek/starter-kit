@@ -1,5 +1,8 @@
 package pl.spring.demo.config;
 
+import java.util.Collection;
+import java.util.HashSet;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -10,8 +13,10 @@ import org.springframework.core.convert.converter.Converter;
 
 import pl.spring.demo.aop.BookDaoAdvisor;
 import pl.spring.demo.common.Sequence;
+import pl.spring.demo.common.StorageSequence;
 import pl.spring.demo.dao.BookDao;
 import pl.spring.demo.dao.impl.BookDaoImpl;
+import pl.spring.demo.db.Storage;
 import pl.spring.demo.entities.BookEntity;
 import pl.spring.demo.helpers.AuthorToHelper;
 import pl.spring.demo.service.BookService;
@@ -41,8 +46,25 @@ public class AppConfiguration {
 	}
 	
 	@Bean
+	public Sequence bookStorageSequence() {
+		StorageSequence<BookEntity> ss = new StorageSequence<BookEntity>(bookEntityStorage());
+		return ss;
+	}
+	
+	@Bean
 	public BookDaoAdvisor bookDaoAdvisor() {
 		return new BookDaoAdvisor();
+	}
+	
+	@Bean
+	public Storage<BookEntity> bookEntityStorage() {
+		try {
+			@SuppressWarnings("unchecked")
+			Storage<BookEntity> storage = new Storage<BookEntity>((Class<? extends Collection<BookEntity>>) HashSet.class);
+			return storage;
+		} catch(Exception e) {
+			throw new RuntimeException(e);
+		}
 	}
 	
 	@Bean
@@ -54,7 +76,7 @@ public class AppConfiguration {
 				BookEntity be = new BookEntity();
 				be.setId(arg0.getId());
 				be.setTitle(arg0.getTitle());
-				be.setAuthors(AuthorToHelper.string2Authors(arg0.getAuthors()));
+				be.setAuthors(AuthorToHelper.authors2String(arg0.getAuthors()));
 				return be;
 			}
 		};
@@ -69,7 +91,7 @@ public class AppConfiguration {
 				BookTo bookTo = new BookTo();
 				bookTo.setId(arg0.getId());
 				bookTo.setTitle(arg0.getTitle());
-				bookTo.setAuthors(AuthorToHelper.authors2String(arg0.getAuthors()));
+				bookTo.setAuthors(AuthorToHelper.string2Authors(arg0.getAuthors()));
 				return bookTo;
 			}
 		};

@@ -1,5 +1,7 @@
 package pl.spring.demo.to;
 
+import pl.spring.demo.helpers.AuthorToHelper;
+
 public class AuthorTo {
 
 	private int id;
@@ -33,5 +35,16 @@ public class AuthorTo {
 		this.lastName = lastName;
 	}
 
+	public AuthorTo(int id, String firstName, String lastName) {
+		super();
+		this.id = id;
+		this.firstName = firstName;
+		this.lastName = lastName;
+	}
+
+	public AuthorTo() {}
 	
+	public static AuthorTo of(String author) {
+		return AuthorToHelper.string2Author(author);
+	}
 }

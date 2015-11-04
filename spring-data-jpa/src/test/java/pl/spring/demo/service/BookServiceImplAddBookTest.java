@@ -1,5 +1,8 @@
 package pl.spring.demo.service;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,9 +12,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
 
-import static org.junit.Assert.*;
-
 import pl.spring.demo.config.AppConfiguration;
+import pl.spring.demo.to.AuthorTo;
 import pl.spring.demo.to.BookTo;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -28,7 +30,7 @@ public class BookServiceImplAddBookTest {
     @Test
     public void testShouldSaveBook() {
         // given
-        BookTo book = new BookTo(null, "title", "author");
+        BookTo book = new BookTo(null, "title", new AuthorTo(1, "author", "author"));
         // when
         BookTo result = bookService.saveBook(book);
         // then

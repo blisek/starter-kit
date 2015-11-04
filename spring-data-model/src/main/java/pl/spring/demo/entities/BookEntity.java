@@ -1,16 +1,12 @@
 package pl.spring.demo.entities;
 
-import java.util.List;
-
-import pl.spring.demo.helpers.AuthorToHelper;
-import pl.spring.demo.to.AuthorTo;
 import pl.spring.demo.to.IdAware;
 
 public class BookEntity implements IdAware {
 
     private Long id;
     private String title;
-    private List<AuthorTo> authors;
+    private String authors;
     
     public Long getId() {
 		return id;
@@ -18,7 +14,7 @@ public class BookEntity implements IdAware {
 	public String getTitle() {
 		return title;
 	}
-	public List<AuthorTo> getAuthors() {
+	public String getAuthors() {
 		return authors;
 	}
 	public void setId(Long id) {
@@ -27,24 +23,17 @@ public class BookEntity implements IdAware {
 	public void setTitle(String title) {
 		this.title = title;
 	}
-	public void setAuthors(List<AuthorTo> authors) {
+	public void setAuthors(String authors) {
 		this.authors = authors;
 	}
 	
 	public BookEntity() {}
 	
-	public BookEntity(Long id, String title, List<AuthorTo> authors) {
-		super();
-		this.id = id;
-		this.title = title;
-		this.authors = authors;
-	}
-	
 	public BookEntity(Long id, String title, String authors) {
 		super();
 		this.id = id;
 		this.title = title;
-		this.authors = AuthorToHelper.string2Authors(authors);
+		this.authors = authors;
 	}
 	@Override
 	public int hashCode() {
