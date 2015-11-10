@@ -11,16 +11,11 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.core.convert.converter.Converter;
 
-import pl.spring.demo.aop.BookDaoAdvisor;
 import pl.spring.demo.common.Sequence;
 import pl.spring.demo.common.StorageSequence;
-import pl.spring.demo.dao.BookDao;
-import pl.spring.demo.dao.impl.BookDaoImpl;
 import pl.spring.demo.db.Storage;
 import pl.spring.demo.entities.BookEntity;
 import pl.spring.demo.helpers.AuthorToHelper;
-import pl.spring.demo.service.BookService;
-import pl.spring.demo.service.impl.BookServiceImpl;
 import pl.spring.demo.to.BookTo;
 
 @Configuration
@@ -30,30 +25,13 @@ import pl.spring.demo.to.BookTo;
 public class AppConfiguration {
 
 	@Bean
-	public BookService bookService() {
-		BookServiceImpl bsi = new BookServiceImpl();
-		return bsi;
-	}
-	
-	@Bean
-	public BookDao bookDao() {
-		return new BookDaoImpl();
-	}
-	
-	@Bean
 	public Sequence sequence() {
 		return new Sequence();
 	}
 	
 	@Bean
 	public Sequence bookStorageSequence() {
-		StorageSequence<BookEntity> ss = new StorageSequence<BookEntity>(bookEntityStorage());
-		return ss;
-	}
-	
-	@Bean
-	public BookDaoAdvisor bookDaoAdvisor() {
-		return new BookDaoAdvisor();
+		return new StorageSequence<BookEntity>(bookEntityStorage());
 	}
 	
 	@Bean
