@@ -1,0 +1,23 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://thymeleaf.org">
+<head>
+	<title>Add book</title>
+</head>
+<body>
+	<form action="" method="POST">
+		<p>
+			<label for="bookIdDisabled">Id:</label>
+			<input type="text" name="bookIdDisabled" th:value="${book.id}" disabled/>
+		</p>
+		<p>
+			<label for="bookTitle">Tytul ksiazki:</label>
+			<input type="text" name="bookTitle" th:value="${book.title}"/>
+		</p>
+		<p>
+			<label for="bookAuthors">Autorzy ksiazki:</label>
+			<input type="text" name="bookAuthors"/>
+		</p>
+		<input type="hidden" name="bookId" th:value="${book.id}"/>
+		<input type="submit" value="Zmien"/>
+	</form>
+</html>

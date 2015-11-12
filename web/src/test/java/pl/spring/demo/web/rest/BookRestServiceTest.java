@@ -1,5 +1,6 @@
 package pl.spring.demo.web.rest;
 
+import org.hibernate.sql.Delete;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,6 +14,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
+
 import pl.spring.demo.service.BookService;
 import pl.spring.demo.to.BookTo;
 import pl.spring.demo.web.utils.FileUtils;
@@ -21,6 +23,7 @@ import java.io.File;
 import java.util.Arrays;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -84,5 +87,18 @@ public class BookRestServiceTest {
                 .content(json.getBytes()));
         // then
         response.andExpect(status().isOk());
+    }
+    
+    @Test
+    public void testShouldRemoveBook() throws Exception {
+    	// given
+    	final Long removedBookId = 3l;
+    	// when
+    	ResultActions response = this.mockMvc.perform(delete("/book")
+    			.accept(MediaType.APPLICATION_JSON)
+    			.contentType(MediaType.APPLICATION_JSON)
+    			.content(removedBookId.toString()));
+    	response.andExpect(status().isOk());
+    	Mockito.verify(bookService).removeBook(removedBookId);
     }
 }

@@ -17,5 +17,4 @@
             <bean class="com.fasterxml.jackson.databind.ObjectMapper"/>
         </property>
     </bean>
-
 </beans>
