@@ -2,7 +2,6 @@ package pl.spring.demo.web.controller;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -23,7 +22,6 @@ public class BookController {
     
     private static final String BOOK_REDIRECT = "redirect:/books";
     private static final String BOOK_DELETED_MESSAGE = "Ksiazka \"%s\" autora %s zostala usunieta z bazy.";
-    private static final String BOOK_ID_NOT_FOUND_MESSAGE = "Ksiazka o id %s nie zostala odnaleziona";
 
     @RequestMapping(value = "/books", method = RequestMethod.GET)
     public String bookList(Map<String, Object> params) {

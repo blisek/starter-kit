@@ -1,19 +1,16 @@
 package pl.spring.demo.dao;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 
 import java.util.List;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import pl.spring.demo.entity.BookEntity;
 import pl.spring.demo.entity.LibraryEntity;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -24,7 +21,7 @@ public class LibraryDaoImplTest {
     private LibraryDao libraryDao;
 
     @Test
-    public void testShouldRemoveAllBooks() {
+    public void testShouldFindLibrary() {
         // given
         final String libraryPrefix = "Biblioteka N";
         // when
@@ -35,15 +32,4 @@ public class LibraryDaoImplTest {
         assertEquals("Biblioteka Narodowa", libraryEntities.get(0).getName());
     }
 
-//    @Test
-//    public void testShouldFindBooksByTitle() {
-//        // given
-//        final String bookTitle = "p";
-//        // when
-//        List<BookEntity> booksEntity = bookDao.findBookByTitle(bookTitle);
-//        // then
-//        assertNotNull(booksEntity);
-//        assertFalse(booksEntity.isEmpty());
-//        assertEquals("Pierwsza książka", booksEntity.get(0).getTitle());
-//    }
 }
