@@ -39,7 +39,7 @@ public class LibraryRepositoryTest {
     @Test
     public void testShouldRemoveAllBooksWithLibrary() {
     	// given
-    	final long libraryId = 1;
+    	final long libraryId = 3;
     	// when
     	LibraryEntity libraryEntity = libraryRepository.findOne(libraryId);
     	assertNotNull(libraryEntity);
