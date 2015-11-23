@@ -10,12 +10,14 @@
     			<th>Id</th>
     			<th>Title</th>
     			<th>Authors</th>
+    			<th>Library</th>
     			<th>Actions</th>
     		</tr>
     		<tr th:each="book : ${books}">
     			<td th:text="${book.id}"></td>
     			<td th:text="${book.title}"></td>
-    			<td th:text="${book.authors}"></td>
+    			<td><div th:each="author : ${book.authors}"><div th:text="${#strings.concat(author.firstName, ' ', author.lastName)}">,</div></div></td>
+    			<td th:text="${book.library}"></td>
     			<td>
     				<form action="books/delete" method="POST">
     					<input type="hidden" name="bookId" th:value="${book.id}"/>
