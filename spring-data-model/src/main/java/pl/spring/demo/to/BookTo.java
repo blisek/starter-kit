@@ -6,7 +6,7 @@ public class BookTo {
     private Long id;
     private String title;
     private List<AuthorTo> authors;
-    private String library;
+    private LibraryTo library;
 	
     public BookTo() {}
     
@@ -17,9 +17,8 @@ public class BookTo {
 		this.authors = authors;
 	}
 
-
-
-	public BookTo(Long id, String title, List<AuthorTo> authors, String library) {
+	public BookTo(Long id, String title, List<AuthorTo> authors,
+			LibraryTo library) {
 		super();
 		this.id = id;
 		this.title = title;
@@ -51,13 +50,12 @@ public class BookTo {
 		this.authors = authors;
 	}
 
-	public String getLibrary() {
+	public LibraryTo getLibrary() {
 		return library;
 	}
 
-	public void setLibrary(String library) {
+	public void setLibrary(LibraryTo library) {
 		this.library = library;
 	}
-    
-    
+
 }

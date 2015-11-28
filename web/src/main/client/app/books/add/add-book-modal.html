@@ -1,0 +1,36 @@
+<div>
+    <form novalidate>
+        <div class="modal-header">
+            <h3 class="modal-title">Add book</h3>
+        </div>
+        <div class="container-fluid" ng-model="book">
+        	<div class="form-group" ng-class="titleError" ng-model="title">
+        		<label for="bookTitle">Book title</label>
+        		<input type="text" class="form-control" id="bookTitle" name="bookTitle" placeholder="Enter book title" ng-value="title">
+        	</div>
+        	<div class="form-group" ng-if="authors.length > 0">
+        		<label>Added authors</label>
+        		<ul ng-model="authors">
+        			<li ng-repeat="author in authors">
+        				{{ author.firstName }} {{ author.lastName }}
+        			</li>
+        		</ul>
+        	</div>
+        	<div ng-class="currentAuthorError">
+	        	<div class="form-group" >
+	        			<label for="authorName">Authors</label>
+	        			<div class="input-group">
+	        			<input type="text" class="form-control" id="author" name="author" ng-model="currentAuthor" placeholder="Enter author name separated by space">
+	        			<span class="input-group-btn">
+	        				<input type="button" class="btn btn-default" ng-click="addAuthor()" value="Add author"></input>
+	        			</span>
+	        		</div>
+	        	</div>
+        	</div>
+        </div>
+        <div class="modal-footer">
+        	<button class="btn btn-success" ng-disabled="authors.length === 0" ng-click="addBook()">Add</button>
+            <button class="btn btn-warning" ng-click="$dismiss()">Close</button>
+        </div>
+    </form>
+</div>

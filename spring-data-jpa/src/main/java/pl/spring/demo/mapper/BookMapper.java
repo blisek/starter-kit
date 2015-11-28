@@ -2,9 +2,11 @@ package pl.spring.demo.mapper;
 
 import pl.spring.demo.entity.AuthorEntity;
 import pl.spring.demo.entity.BookEntity;
+import pl.spring.demo.entity.LibraryEntity;
 import pl.spring.demo.entity.PersonalData;
 import pl.spring.demo.to.AuthorTo;
 import pl.spring.demo.to.BookTo;
+import pl.spring.demo.to.LibraryTo;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -14,7 +16,7 @@ public class BookMapper {
     public static BookTo map(BookEntity bookEntity) {
         if (bookEntity != null) {
         	List<AuthorTo> authorsTo = bookEntity.getAuthors().stream().map(BookMapper::map).collect(Collectors.toList());
-            return new BookTo(bookEntity.getId(), bookEntity.getTitle(), authorsTo, bookEntity.getLibrary().getName());
+            return new BookTo(bookEntity.getId(), bookEntity.getTitle(), authorsTo, map(bookEntity.getLibrary()));
         }
         return null;
     }
@@ -42,7 +44,23 @@ public class BookMapper {
     	}
     	return null;
     }
+    
+    public static LibraryEntity map(LibraryTo libraryTo) {
+    	if(libraryTo != null) {
+    		return new LibraryEntity(libraryTo.getId(), libraryTo.getName(), null);
+    	}
+    	
+    	return null;
+    }
 
+    public static LibraryTo map(LibraryEntity libraryEntity) {
+    	if(libraryEntity != null) {
+    		return new LibraryTo(libraryEntity.getId(), libraryEntity.getName());
+    	}
+    	
+    	return null;
+    }
+    
     public static List<BookTo> map2To(List<BookEntity> bookEntities) {
         return bookEntities.stream().map(BookMapper::map).collect(Collectors.toList());
     }
