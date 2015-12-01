@@ -3,16 +3,17 @@
         <div class="modal-header">
             <h3 class="modal-title">Add book</h3>
         </div>
-        <div class="container-fluid" ng-model="book">
+        <div class="container-fluid" >
         	<div class="form-group" ng-class="titleError" ng-model="title">
         		<label for="bookTitle">Book title</label>
-        		<input type="text" class="form-control" id="bookTitle" name="bookTitle" placeholder="Enter book title" ng-value="title">
+        		<input type="text" class="form-control" id="bookTitle" name="bookTitle" placeholder="Enter book title" ng-model="book.title" >
         	</div>
-        	<div class="form-group" ng-if="authors.length > 0">
+        	<div class="form-group" ng-model="book.authors">
         		<label>Added authors</label>
-        		<ul ng-model="authors">
-        			<li ng-repeat="author in authors">
-        				{{ author.firstName }} {{ author.lastName }}
+        		<span class="text-danger" ng-if="book.authors.length == 0">Author list empty!</span>
+        		<ul ng-if="book.authors.length > 0" class="list-unstyled">
+        			<li ng-repeat="author in book.authors">
+        				<a ng-click="book.authors.splice($index, 1)"><span class="glyphicon glyphicon-remove"/></a> {{ author.firstName }} {{ author.lastName }}
         			</li>
         		</ul>
         	</div>
@@ -29,7 +30,7 @@
         	</div>
         </div>
         <div class="modal-footer">
-        	<button class="btn btn-success" ng-disabled="authors.length === 0" ng-click="addBook()">Add</button>
+        	<button class="btn btn-success" ng-disabled="!formValid()" ng-click="$close(book)">Add</button>
             <button class="btn btn-warning" ng-click="$dismiss()">Close</button>
         </div>
     </form>

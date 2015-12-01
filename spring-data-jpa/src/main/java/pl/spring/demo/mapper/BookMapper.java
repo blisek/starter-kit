@@ -38,9 +38,16 @@ public class BookMapper {
     }
     
     public static AuthorEntity map(AuthorTo authorTo) {
+    	System.out.println("Author: " + authorTo);
+    	System.out.println("\tAuthor first name: " + authorTo.getFirstName());
+    	System.out.println("\tAuthor last name: " + authorTo.getLastName());
     	if(authorTo != null) {
     		PersonalData pd = new PersonalData(authorTo.getFirstName(), authorTo.getLastName());
-    		return new AuthorEntity(authorTo.getId(), pd);
+    		AuthorEntity ae = new AuthorEntity();
+    		if(authorTo.getId() != null)
+    			ae.setId(authorTo.getId());
+    		ae.setPersonalData(pd);
+    		return ae;
     	}
     	return null;
     }

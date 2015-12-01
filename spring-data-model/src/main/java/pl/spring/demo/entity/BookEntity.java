@@ -3,6 +3,7 @@ package pl.spring.demo.entity;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -24,7 +25,7 @@ public class BookEntity implements Serializable {
     @Column(nullable = false, length = 50)
     private String title;
     
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST })
     @JoinTable(
     	name = "book_author", 
     	joinColumns = {@JoinColumn(name="book_id")},
@@ -32,7 +33,7 @@ public class BookEntity implements Serializable {
     )
     private List<AuthorEntity> authors;
 
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    @ManyToOne(/*optional = false, */fetch = FetchType.LAZY)
     @JoinColumn(name = "library_id")
     private LibraryEntity library;
     // for hibernate

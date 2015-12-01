@@ -1,0 +1,20 @@
+<div>
+    <form name="editForm" novalidate>
+        <div class="modal-header">
+            <h3 class="modal-title">Edit book</h3>
+        </div>
+        <div class="container-fluid" >
+        	<div class="form-group" >
+        		<label for="bookTitle">Book title</label>
+        		<div class="input-group">
+        			<span class="input-group-addon"><span class="glyphicon glyphicon-book"></span></span>
+        			<input type="text" class="form-control" id="bookTitle" name="bookTitle" placeholder="Enter book title" ng-model="editedBook.title" required>
+        		</div>
+        	</div>
+        </div>
+        <div class="modal-footer">
+        	<button class="btn btn-success" ng-disabled="editForm.$invalid" ng-click="$close(editedBook)">Save</button>
+            <button class="btn btn-warning" ng-click="$dismiss()">Close</button>
+        </div>
+    </form>
+</div>

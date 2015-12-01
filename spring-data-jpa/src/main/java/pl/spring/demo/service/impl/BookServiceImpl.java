@@ -16,6 +16,7 @@ import pl.spring.demo.helpers.BookSearchCriteria;
 import pl.spring.demo.mapper.BookMapper;
 import pl.spring.demo.repository.BookRepository;
 import pl.spring.demo.service.BookService;
+import pl.spring.demo.to.AuthorTo;
 import pl.spring.demo.to.BookTo;
 
 import com.mysema.query.BooleanBuilder;
@@ -59,6 +60,10 @@ public class BookServiceImpl implements BookService {
     @Override
     @Transactional(readOnly = false)
     public BookTo saveBook(BookTo book) {
+    	System.out.println("Title: " + book.getTitle());
+    	for(AuthorTo author : book.getAuthors()) {
+    		System.out.println("author: " + author.getFirstName() + " " + author.getLastName());
+    	}
         BookEntity entity = BookMapper.map(book);
         entity = bookRepository.save(entity);
         return BookMapper.map(entity);

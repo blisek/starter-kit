@@ -44,8 +44,10 @@ public class BookController {
     	return "message";
     }
     
+    /*
     @RequestMapping("/books/*")
     public String defaultRedirect(HttpServletRequest request) {
     	return BOOK_REDIRECT;
     }
+    */
 }

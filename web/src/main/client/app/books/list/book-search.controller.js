@@ -1,7 +1,8 @@
 angular.module('app.books').controller('BookSearchController', function ($scope, $window, $location, bookService, Flash, $modal) {
     'use strict';
 
-    $scope.books = [{'id': 1, 'title': 'AAAA', 'author': 'JDJ'}];
+    $scope.books = [];
+    //$scope.book = undefined;
     $scope.prefix = '';
     $scope.gridOptions = { data: 'books' };
 
@@ -18,7 +19,7 @@ angular.module('app.books').controller('BookSearchController', function ($scope,
         bookService.search($scope.prefix).then(function (response) {
             angular.copy(response.data, $scope.books);
         }, function (err) {
-            Flash.create('danger', 'Wyjątek:' + err.toString(), 'custom-class');
+            Flash.create('danger', 'Wyjątek:' + JSON.stringify(err), 'custom-class');
         });
     };
 
@@ -28,6 +29,17 @@ angular.module('app.books').controller('BookSearchController', function ($scope,
             Flash.create('success', 'Książka została usunięta.', 'custom-class');
         });
     };
+    
+    $scope.addBookSend = function(book) {
+    	bookService.addBook(book).then(function(res) {
+    		//console.log(angular.toJson(res));
+    		var bookRes = angular.copy(res.data);
+    		$scope.books.push(bookRes);
+    		Flash.create('success', 'Ksiazka ' + bookRes.title + ' zostala dodana.', 'custom-class');
+    	}, function(err) {
+    		Flash.create('danger', 'Wyjątek:' + err.data, 'custom-class');
+    	});
+    };
 
     $scope.addBook = function () {
         $modal.open({
@@ -35,15 +47,37 @@ angular.module('app.books').controller('BookSearchController', function ($scope,
             controller: 'BookModalController',
             size: 'lg',
             resolve: {
-            	book: function() {
+            	book : function() {
             		return $scope.book;
             	}
             }
-        }).result.then(function (book) {
-        	alert(book);        
-        }, function() {
-        
+        }).result.then(function(result) {
+        	$scope.addBookSend(angular.copy(result));
         });
     };
+    
+    $scope.editBook = function(arrayId) {
+    	$modal.open({
+    		templateUrl: 'books/edit/edit-book-modal.html',
+    		controller: 'BookEditModalController',
+    		size: 'md',
+    		resolve: {
+    			editedBook : function() {
+    				console.log('in edited book getter, arrayId: ' + arrayId);
+    				return angular.copy($scope.books[arrayId]);
+    			}
+    		}
+    	}).result.then(function(result) {
+    		console.log("Book edited");
+    		var edited = angular.copy(result);
+    		bookService.updateBook(edited).then(function(res) {
+    			$scope.books[arrayId] = edited;
+    			Flash.create("success", "Zmodyfikowano ksiazke " + edited.title, "custom-class");
+    		}, function(err) {
+    			Flash.create("danger", err.data, "custom-class");
+    		});
+    	});
+    };
 
+	$scope.search();
 });

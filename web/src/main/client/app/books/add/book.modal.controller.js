@@ -1,4 +1,4 @@
-angular.module('app.books').controller('BookModalController', function ($scope, $uibModalInstance) {
+angular.module('app.books').controller('BookModalController', function ($scope, $modalInstance) {
     'use strict';
 
     $scope.title = '';
@@ -8,11 +8,13 @@ angular.module('app.books').controller('BookModalController', function ($scope, 
     $scope.book = {title: '', authors : []};
     
     $scope.addAuthor = function(name) {
+    	var strArray;
+
     	if($scope.currentAuthor == "") {
     		$scope.currentAuthorError = 'has-error';
     		return;
     	}
-    	var strArray = $scope.currentAuthor.split(" ");
+    	strArray = $scope.currentAuthor.split(" ");
     	if(strArray.length === 1) {
     		$scope.book.authors.push({firstName : '', lastName : strArray[0]});
     	} else {
@@ -23,13 +25,8 @@ angular.module('app.books').controller('BookModalController', function ($scope, 
     	$scope.currentAuthorError = '';
     };
     
-    $scope.addBook = function() {
-    	if($scope.book.title == "") {
-    		$scope.titleError = 'has-error';
-    		return;
-    	}
-    	
-    	$uibModalInstance.close($scope.book);
+    $scope.formValid = function() {
+    	return !!($scope.book.title !== '' && $scope.book.authors.length > 0);
     };
     
 });
